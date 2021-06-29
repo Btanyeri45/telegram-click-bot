@@ -1,15 +1,13 @@
-import json
 import os
 import subprocess
 import sys
 import time
-from typing import Any, Union
 
 import requests
 from requests import ConnectionError
-from requests.models import requote_uri
 
 from .exceptions import DejavuError, LinkError
+from .presets import ClickBotEntity
 from .settings import BASE_DIR
 
 OPENURL_UTIL_PATH = f'{BASE_DIR}/src/utils/openurl.py'
@@ -22,7 +20,7 @@ STAY_COUNTDOWN = 'timeleft'
 USER_VISIT_MSG = '/visit'
 
 
-def visit_site(chat_summary: dict, chat_type: object) -> None:
+def visit_site(chat_summary: dict, chat_type: ClickBotEntity) -> None:
     """Perform HTTP requests accordingly.
 
     Args:
@@ -39,7 +37,7 @@ def visit_site(chat_summary: dict, chat_type: object) -> None:
     url = chat_type.check_buttonurl(chat_summary)['url']
     if not _new_url(url=url):
         raise LinkError
-    response_object = {}
+
     with requests.Session() as session:
         try:
             resp = session.get(url, timeout=5)
@@ -74,7 +72,7 @@ def _format_header(header: dict, options: dict) -> dict:
         dict: A header ready for an HTTP request.
     """
     rewd = '/reward'
-    code = f'/visit/{options.get("payload").get("code")}'
+    code = f'/visit/{options["payload"]["code"]}'
     header['origin'] = options['redirect'].replace(rewd, '')
     header['referer'] = options['redirect'].replace(rewd, code)
     return header

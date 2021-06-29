@@ -1,20 +1,21 @@
 from typing import Any
 
+from telethon import TelegramClient
+
 from .exceptions import LinkError, NoOfferError
 
 
 class ClickBotMsg:
-
-    def __init__(self, client) -> None:
+    def __init__(self, client: TelegramClient) -> None:
         self.client = client
 
     def _start(self) -> None:
         self.client.start()
 
-    def _send_message(self, entity, message) -> None:
+    def _send_message(self, entity: str, message: str) -> None:
         self.client.send_message(entity, message)
 
-    def _get_messages(self, entity) -> dict[str, Any]:
+    def _get_messages(self, entity: str) -> dict[str, Any]:
         message = self.client.get_messages(entity)
         message = message[0]
         self._messages_n_action(message)
@@ -25,7 +26,7 @@ class ClickBotMsg:
         }
         return summary
 
-    def _messages_n_action(self, message) -> None:
+    def _messages_n_action(self, message: Any) -> None:
         user_common = {
             'visit': '/visit',
         }

@@ -1,6 +1,7 @@
+import argparse
+
 from src import settings
 from src.clients import Bot
-import argparse
 
 api_id = settings.API_ID
 api_hash = settings.API_HASH
