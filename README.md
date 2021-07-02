@@ -25,11 +25,17 @@ git clone https://github.com/huenique/telegram-click-bot.git
 2. Install the dependencies: `pip install -r requirements.txt`
 
 # Usage
-Inside telegram_click_bot, run:
+From the project root, run:
 ```
-python main.py @Dogecoin_click_bot
+python cli.py -h
 ```
-Check your Telegram app!
+
+Once you get it running, go to your Telegram app!
+
+# Tips
+
+* Let the script run and leave your device;
+* or, run it on a different device.
 
 # Contributing
 Post and discuss an [issue](https://github.com/huenique/telegram-click-bot/issues).
