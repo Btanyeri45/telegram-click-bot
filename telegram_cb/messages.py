@@ -6,6 +6,9 @@ from .exceptions import LinkError, NoOfferError
 
 
 class ClickBotMsg:
+    """Class for handling telegram messages.
+    """
+
     def __init__(self, client: TelegramClient) -> None:
         self.client = client
 

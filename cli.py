@@ -1,12 +1,13 @@
 import argparse
+import sys
 
-from src import settings
-from src.clients import Bot
+from telegram_cb import settings
+from telegram_cb.clients import Bot
 
 api_id = settings.API_ID
 api_hash = settings.API_HASH
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('entity',
                         type=str,
@@ -20,3 +21,7 @@ if __name__ == '__main__':
     })
     bot.connect()
     bot.main_loop(entity)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
