@@ -81,11 +81,11 @@ def new_url(
     the URL currently saved in said file.
 
     Args:
+        bdir (str): Directory where the fill will be saved and located.
         url (str): Next target URL.
         write (bool): Whether to write the url to the file.
         clear (bool): Whether to clear the content of the file.
         fname (str): File where the previous/active URL is stored.
-        fdir (str): Directory where within BASE_DIR.
 
     Returns:
         bool: True for no match, False otherwise. 
