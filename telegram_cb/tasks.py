@@ -3,21 +3,29 @@ import sys
 import time
 
 import requests
-from requests import ConnectionError
+from requests.models import Response
 
 from .exceptions import DejavuError, LinkError
 from .helpers import check_buttonurl, format_header, new_url, post_options
 from .presets import ClickBotPrereq
 from .settings import BASE_DIR
 
-OPENURL_UTIL_PATH = f'{BASE_DIR}/utils/openurl.py'
 
-# HTML template attrib
-CHALLENGE_FORM = 'challenge-form'
-STAY_COUNTDOWN = 'timeleft'
+class ClinetSession():
 
-# Checks
-USER_VISIT_MSG = '/visit'
+    def __init__(self) -> None:
+        self.session = requests.Session()
+
+    def get(self, url, timeout=5) -> tuple[Response, str]:
+        resp = self.session.get(url, timeout=timeout)
+        return resp, resp.text.lower()
+
+    def post(self, url, data, headers, timeout=5) -> tuple[str, int]:
+        resp = self.session.post(url,
+                                 data=data,
+                                 headers=headers,
+                                 timeout=timeout)
+        return resp.text, resp.status_code
 
 
 def do_visit_site(chat_summary: dict) -> None:
@@ -28,34 +36,31 @@ def do_visit_site(chat_summary: dict) -> None:
 
     Raises:
         LinkError: Can't perform operations on the URL.
-        DejavuError: Loop encounters a client sent message.
+        DejavuError: Loop encounters a client-sent message.
     """
-    rest = 20
+
+    cf = 'challenge-form'
+    tl = 'timeleft'
+    clientuser_msg = '/visit'
+
     url = check_buttonurl(chat_summary)['url']
     if not new_url(url=url):
         raise LinkError
 
-    with requests.Session() as session:
-        try:
-            resp = session.get(url, timeout=5)
-            resptext = resp.text.lower()
-        except ConnectionError:
-            raise
-        if USER_VISIT_MSG in resptext:
-            raise DejavuError
-        elif STAY_COUNTDOWN in resptext:
-            ch = ClickBotPrereq().custom_headers
-            op = post_options(resp.text, url)
-            he = format_header(ch, op)
-            session.post(op['redirect'],
-                         data=op['payload'],
-                         headers=he,
-                         allow_redirects=True,
-                         timeout=5)
-        elif CHALLENGE_FORM in resptext:
-            subprocess.Popen([sys.executable, OPENURL_UTIL_PATH, url])
-            time.sleep(rest)
-        new_url(url=url, write=True)
+    session: ClinetSession = ClinetSession()
+    get_res, resp_text = session.get(url)
+
+    if clientuser_msg in resp_text:
+        raise DejavuError
+    elif tl in resp_text:
+        opt = post_options(get_res.text, url)
+        hed = format_header(ClickBotPrereq().custom_headers, opt)
+        _ = session.post(opt['redirect'], opt['paylaod'], hed)
+    elif cf in resp_text:
+        subprocess.Popen([sys.executable, f'{BASE_DIR}/utils/openurl.py', url])
+        time.sleep(10)
+
+    new_url(url=url, write=True)
 
 
 def do_join_chat():
