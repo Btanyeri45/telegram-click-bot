@@ -30,12 +30,27 @@ From the project root, run:
 python cli.py -h
 ```
 
+Example:
+
+```
+python cli.py "@Litecoin_click_bot"
+```
+
+You will be asked for your phone number on first run. This is what it will look like:
+```
+Please enter your phone (or bot token): +639123456789
+Please enter the code you received: 12345
+```
+
 Once you get it running, go to your Telegram app!
 
 # Tips
 
 * Let the script run and leave your device;
 * or, run it on a different device.
+* If you run into errors related to coroutines or telethon, run `make reset-session`. If your OS doesn't have `make`, simply delete the session files from the package root.
 
 # Contributing
-Post and discuss an [issue](https://github.com/huenique/telegram-click-bot/issues).
+- Fork the [repository](https://github.com/huenique/telegram-click-bot)
+- Post and discuss an [issue](https://github.com/huenique/telegram-click-bot/issues).
+- Create a [pull request](https://github.com/huenique/telegram-click-bot/pulls)
