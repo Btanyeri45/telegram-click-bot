@@ -18,14 +18,14 @@ git clone https://github.com/huenique/telegram-click-bot.git
 ```
 
 # Setup
-1. Configure your environment variables or create a copy of `.env.example` with `.example` omitted.
+1. Configure your environment variables or create a copy of `.env.example` inside the package root directory without `.example` at the end.
 
-    Set your Telegram `API_ID` and `API_HASH`. Get your own API_ID and API_HASH from [https://my.telegram.org](https://my.telegram.org)
+    Inside the `.env` file, set your Telegram `API_ID` and `API_HASH`. Get your own API_ID and API_HASH from [https://my.telegram.org](https://my.telegram.org)
 
 2. Install the dependencies: `pip install -r requirements.txt`
 
 # Usage
-From the project root, run:
+From the package root, run:
 ```
 python cli.py -h
 ```
@@ -43,6 +43,17 @@ Please enter the code you received: 12345
 ```
 
 Once you get it running, go to your Telegram app!
+
+# Update
+
+Caution: For users only
+
+To update the package and to get the new features and improvements, run:
+
+```
+git reset --hard
+git pull
+```
 
 # Tips
 
