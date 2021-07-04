@@ -5,17 +5,17 @@ import webbrowser
 
 
 def open(url):
-    _sys = sys.platform
-    _prc = 1
-    if _sys == 'windows':
+    s = sys.platform
+    p = 1
+    if s == 'windows':
         proc = subprocess.run(['start', f'{url}'], capture_output=True)
-        _prc = proc.returncode
-    elif _sys == 'linux':
+        p = proc.returncode
+    elif s == 'linux':
         proc = subprocess.run(['xdg-open', f'{url}'], capture_output=True)
-        _prc = proc.returncode
+        p = proc.returncode
     else:
         webbrowser.open(url, new=2, autoraise=False)
-    return _prc
+    return p
 
 
 def args():
