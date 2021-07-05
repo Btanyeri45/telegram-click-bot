@@ -110,7 +110,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-# .env
+.env
 .env/
 .venv/
 env/
@@ -165,6 +165,7 @@ pyvenv.cfg
 pip-selfcheck.json
 
 ### VisualStudioCode ###
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -176,5 +177,10 @@ pip-selfcheck.json
 # Ignore all local history of files
 .history
 .ionide
+
+### Telegram Click Bot ###
+# Ignore script generated files
+telegram_cb/*.txt
+*.session
 
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,venv
