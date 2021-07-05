@@ -55,7 +55,7 @@ def do_visit_site(chat_summary: dict) -> None:
     elif tl in resp_text:
         opt = post_options(get_res.text, url)
         hed = format_header(ClickBotPrereq().custom_headers, opt)
-        _ = session.post(opt['redirect'], opt['paylaod'], hed)
+        _ = session.post(opt['redirect'], opt['payload'], hed)
     elif cf in resp_text:
         subprocess.Popen([sys.executable, f'{BASE_DIR}/utils/openurl.py', url])
         time.sleep(10)
