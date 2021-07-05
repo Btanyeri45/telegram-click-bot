@@ -72,13 +72,12 @@ def new_url(
     url: str = '',
     write: bool = False,
     clear: bool = False,
-    fname: str = 'currenturl.txt',
+    fname: str = 'url.txt',
 ) -> bool:
     """Check if the next target URL is currently being accessed.
 
-    A lazy and ugly solution to long wait times during site visits. This 
-    will perform IO operations on a text file and match the passed URL with 
-    the URL currently saved in said file.
+    This will perform IO operations on a text file and match the passed 
+    URL with the URL currently saved in said file.
 
     Args:
         bdir (str): Directory where the fill will be saved and located.
@@ -88,7 +87,7 @@ def new_url(
         fname (str): File where the previous/active URL is stored.
 
     Returns:
-        bool: True for no match, False otherwise. 
+        bool: True for not match, False otherwise. 
     """
     fpath = os.path.join(bdir, fname)
     is_new = True

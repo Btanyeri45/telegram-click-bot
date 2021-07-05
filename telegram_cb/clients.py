@@ -3,7 +3,7 @@ import time
 from requests import ConnectionError
 from telethon import TelegramClient, sync
 
-from .exceptions import DejavuError, LinkError, LoopError, NoOfferError
+from .exceptions import DejavuError, LinkError, NoOfferError
 from .helpers import new_url, restart_program
 from .messages import ClickBotMsg
 from .tasks import do_visit_site
@@ -33,12 +33,26 @@ class Bot:
             # self.join_chat()
             # self.message_bot()
 
-    def visit_site(self, entity: str, max_attempt: int, max_loop: int = 10):
-        current_loop = 0
-        attempt = 0
-        rest = 10
-        while attempt <= max_attempt:
-            if current_loop == max_loop:
+    def visit_site(self, entity: str, max_attempt: int):
+        # Specify limits
+        max_link_cls = 10
+        max_link_err = 10
+
+        # Counters
+        cls_att = 0
+        link_err = 0
+        visit_att = 0
+
+        while visit_att <= max_attempt:
+
+            # Remove current URL when the number of allowed LinkError
+            # reaches maximum
+            if link_err == max_link_err:
+                link_err = 0
+                cls_att += 1
+                new_url(clear=True)
+
+            if cls_att == max_link_cls:
                 restart_program()
 
             try:
@@ -48,16 +62,15 @@ class Bot:
             except (AttributeError, DejavuError):
                 self.messg._send_message(entity, '/visit')
             except LinkError:
-                max_attempt += 1
-                time.sleep(rest)
+                link_err += 1
+                time.sleep(5)
+            except (KeyboardInterrupt, NoOfferError):
                 new_url(clear=True)
-            except NoOfferError:
                 break
-            except LoopError:
-                current_loop += 1
-            except (Exception, KeyboardInterrupt):
+            except Exception:
                 raise
-            attempt += 1
+
+            visit_att += 1
 
     def join_chat(self):
         pass

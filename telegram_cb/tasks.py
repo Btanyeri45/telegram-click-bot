@@ -1,6 +1,5 @@
 import subprocess
 import sys
-import time
 
 import requests
 from requests.models import Response
@@ -58,7 +57,6 @@ def do_visit_site(chat_summary: dict) -> None:
         _ = session.post(opt['redirect'], opt['payload'], hed)
     elif cf in resp_text:
         subprocess.Popen([sys.executable, f'{BASE_DIR}/utils/openurl.py', url])
-        time.sleep(10)
 
     new_url(url=url, write=True)
 
