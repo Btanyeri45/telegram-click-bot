@@ -4,37 +4,31 @@ from requests import ConnectionError
 from telethon import TelegramClient, sync
 
 from .exceptions import DejavuError, LinkError, NoOfferError
-from .helpers import new_url, restart_program
-from .messages import ClickBotMsg
+from .helpers import new_url, restart_client
+from .messages import get_message_details
 from .tasks import do_visit_site
-from .utils.attribute import AttrDict
 
 
 class Bot:
 
-    def __init__(self, *args, **kwargs) -> None:
-        self.setting = AttrDict(**kwargs)
-        self.client = TelegramClient(
-            self.setting.session_name,
-            self.setting.api_id,
-            self.setting.api_hash,
-        )
-        self.messg = ClickBotMsg(self.client)
-
-    def connect(self) -> None:
-        self.client.start()
-
-    def main_loop(self, entity: str, max_attempt: int = 100) -> None:
+    def __init__(self, client: TelegramClient, entity: str) -> None:
+        self.client = client
         self.entity = entity
-        self.messg._send_message(entity, '/visit')
+
+    def main_loop(self) -> None:
+        print('Getting offers...')
+
+        self.client.start()
+        self.client.send_message(self.entity, '/visit')
 
         with self.client:
-            self.visit_site(entity, max_attempt)
+            self.visit_site()
             # self.join_chat()
             # self.message_bot()
 
-    def visit_site(self, entity: str, max_attempt: int):
+    def visit_site(self):
         # Specify limits
+        max_attempt = 100
         max_link_cls = 10
         max_link_err = 10
 
@@ -53,14 +47,14 @@ class Bot:
                 new_url(clear=True)
 
             if cls_att == max_link_cls:
-                restart_program()
+                restart_client()
 
             try:
-                do_visit_site(self.messg._get_messages(entity))
+                do_visit_site(get_message_details(self.client, self.entity))
             except ConnectionError:
                 max_attempt += 1
             except (AttributeError, DejavuError):
-                self.messg._send_message(entity, '/visit')
+                self.client.send_message(self.entity, '/visit')
             except LinkError:
                 link_err += 1
                 time.sleep(5)

@@ -1,48 +1,63 @@
-from typing import Any
+from typing import Any, Union
 
 from telethon import TelegramClient
 
 from .exceptions import LinkError, NoOfferError
 
+MESSAGE_COLLECTION = {}
 
-class ClickBotMsg:
-    """Class for handling telegram messages.
+
+def check_buttonurl(summary: dict) -> dict[str, str]:
+    """Verify and get KeyboardButtonUrl in summary of results.
+
+    The KeyboardButtonUrl object is defined by its attributes,
+    text and url.
+
+    Returns:
+        dict: A dictionary about the message's basic information.
     """
+    details: dict[str, str] = {}
+    dtl_props = ['message_id', 'user_id', 'url']
+    btn_props = ['id', 'user_id', 'rows']
 
-    def __init__(self, client: TelegramClient) -> None:
-        self.client = client
+    for btnp, dtlp in zip(btn_props, dtl_props):
+        # Uncertain if asking for forgiveness is faster or at least
+        # somewhat better in this case
+        try:
+            details[dtlp] = str(summary[btnp][0].buttons[0].url)
+        except TypeError:
+            details[dtlp] = str(summary.get(btnp))
 
-    def _start(self) -> None:
-        self.client.start()
+    return details
 
-    def _send_message(self, entity: str, message: str) -> None:
-        self.client.send_message(entity, message)
 
-    def _get_messages(self, entity: str) -> dict[str, Any]:
-        message = self.client.get_messages(entity)
-        message = message[0]
-        self._messages_n_action(message)
+def get_message_details(client: TelegramClient,
+                        entity: str) -> Union[dict[str, Any], None]:
+    message = client.get_messages(entity)
+    message = message[0]
+    text_lower = message.message.lower()
+
+    user_common = {
+        'visit': '/visit',
+    }
+
+    bot_common = {
+        'reply_a': 'there are no new ads available',
+    }
+
+    try:
         summary = {
             'id': message.id,
             'user_id': message.peer_id.user_id,
             'rows': message.reply_markup.rows,
         }
         return summary
-
-    def _messages_n_action(self, message: Any) -> None:
-        user_common = {
-            'visit': '/visit',
-        }
-        bot_common = {
-            'reply_a': 'there are no new ads available',
-        }
-
-        text = message.message
-        text_lower = text.lower()
-
+    except AttributeError:
         if bot_common['reply_a'] in text_lower:
-            print('\nNo new ads\n')
+            print('No new ads.')
             raise NoOfferError
 
         if user_common['visit'] in text_lower:
             raise LinkError
+
+        return None

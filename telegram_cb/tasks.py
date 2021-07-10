@@ -5,8 +5,8 @@ import requests
 from requests.models import Response
 
 from .exceptions import DejavuError, LinkError
-from .helpers import check_buttonurl, format_header, new_url, post_options
-from .presets import ClickBotPrereq
+from .helpers import custom_headers, format_header, new_url, post_options
+from .messages import check_buttonurl
 from .settings import BASE_DIR
 
 
@@ -53,7 +53,7 @@ def do_visit_site(chat_summary: dict) -> None:
         raise DejavuError
     elif tl in resp_text:
         opt = post_options(get_res.text, url)
-        hed = format_header(ClickBotPrereq().custom_headers, opt)
+        hed = format_header(custom_headers(), opt)
         _ = session.post(opt['redirect'], opt['payload'], hed)
     elif cf in resp_text:
         subprocess.Popen([sys.executable, f'{BASE_DIR}/utils/openurl.py', url])
