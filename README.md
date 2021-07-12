@@ -7,9 +7,15 @@ Automate telegram click bots for easy beer money.
 - @Bitcoinclick_bot
 
 # Features
+- [x] Automatically detect new offers and perform tasks
 - [x] Visit sites
 - [ ] Join chats
 - [ ] Message bots
+
+# TODO
+- [ ] Users stacking
+- [ ] User stack parallel processing
+- [ ] Output status for each process/user
 
 # Installation
 Clone the repository:
