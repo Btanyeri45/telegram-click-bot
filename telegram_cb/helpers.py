@@ -100,11 +100,12 @@ def restart_client():
         p = psutil.Process(os.getpid())
         for handler in p.open_files() + p.connections():
             os.close(handler.fd)
+        python = sys.executable
+        os.execl(python, python, *sys.argv)
+    except psutil.AccessDenied:
+        os.execv(sys.executable, ['python'] + sys.argv)
     except Exception as e:
         sys.exit(e)
-
-    python = sys.executable
-    os.execl(python, python, *sys.argv)
 
 
 if __name__ == '__main__':
