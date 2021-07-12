@@ -3,7 +3,12 @@ import sys
 from typing import Any
 from urllib.parse import urljoin
 
-import psutil
+sys.stderr = open(os.devnull, 'w')
+try:
+    import psutil
+finally:
+    sys.stderr = sys.__stderr__
+
 from bs4 import BeautifulSoup
 
 from telegram_cb.settings import BASE_DIR
