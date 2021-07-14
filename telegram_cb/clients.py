@@ -5,6 +5,7 @@ from telethon import TelegramClient, sync
 
 from .exceptions import DejavuError, LinkError, NoOfferError
 from .helpers import new_url, restart_client
+from .loggers import console_logger
 from .messages import get_message_details
 from .tasks import do_visit_site
 
@@ -16,8 +17,6 @@ class Bot:
         self.entity = entity
 
     def main_loop(self) -> None:
-        print('Getting offers...')
-
         self.client.start()
         self.client.send_message(self.entity, '/visit')
 
@@ -26,6 +25,7 @@ class Bot:
             # self.join_chat()
             # self.message_bot()
 
+    @console_logger
     def visit_site(self):
         # Specify limits
         max_attempt = 100

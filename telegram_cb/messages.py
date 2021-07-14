@@ -4,8 +4,6 @@ from telethon import TelegramClient
 
 from .exceptions import LinkError, NoOfferError
 
-MESSAGE_COLLECTION = {}
-
 
 def check_buttonurl(summary: dict) -> dict[str, str]:
     """Verify and get KeyboardButtonUrl in summary of results.
@@ -54,7 +52,6 @@ def get_message_details(client: TelegramClient,
         return summary
     except AttributeError:
         if bot_common['reply_a'] in text_lower:
-            print('No new ads.')
             raise NoOfferError
 
         if user_common['visit'] in text_lower:

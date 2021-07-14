@@ -1,13 +1,26 @@
 import asyncio
+import os
 
 from telethon import TelegramClient
 from telethon.events import NewMessage
 
 from .clients import Bot
 from .helpers import restart_client
+from .settings import BASE_DIR
+
+
+def check_session_file(session_name: str) -> str:
+    """Replace user input for session with already existing session file.
+    """
+    session_dir = str(BASE_DIR).strip('telegram_cb')
+    for file in os.listdir(session_dir):
+        if file.endswith('.session'):
+            return file.split('.', 1)[0]
+    return session_name
 
 
 def main(session: str, api_id: str, api_hash: str, entity: str) -> None:
+    session = check_session_file(session)
     client = TelegramClient(session, api_id, api_hash)
     run_loop(client, entity)
 
@@ -20,7 +33,6 @@ def run_loop(client: TelegramClient, entity: str):
 
 
 async def site_visits(client: TelegramClient) -> None:
-    print('Waiting for offers.')
     pattern = '^There.*/visit!.'
 
     @client.on(NewMessage(pattern=pattern))
