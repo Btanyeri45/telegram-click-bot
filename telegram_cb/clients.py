@@ -59,8 +59,10 @@ class Bot:
             except LinkError:
                 link_err += 1
                 time.sleep(5)
-            except (Exception, KeyboardInterrupt, NoOfferError):
+            except (KeyboardInterrupt, NoOfferError):
                 new_url(clear=True)
+                break
+            except Exception:
                 raise
 
             visit_att += 1

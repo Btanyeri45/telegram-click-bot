@@ -1,6 +1,8 @@
+import datetime
 import os
 import sys
 import time
+from datetime import date
 from typing import Any
 from urllib.parse import urljoin
 
@@ -116,17 +118,41 @@ def restart_client():
         sys.exit(e)
 
 
+def convert_time_unit(time_diff: float) -> tuple[str, str]:
+    minute = 60000.0
+    hour = 3600000.0
+    day = 86400000.0
+
+    time_diff = time_diff * 1000
+
+    if time_diff >= minute and time_diff < hour:
+        time_finished = str(datetime.timedelta(minutes=time_diff / hour))
+        time_unit = 'minute(s)'
+    elif time_diff >= hour and time_diff < day:
+        time_finished = str(datetime.timedelta(hours=time_diff / hour))
+        time_unit = 'hour(s)'
+    elif time_diff >= day:
+        td = str(datetime.timedelta(days=time_diff / day)).split(',')
+        time_finished = td[0]
+        time_unit = td[1].lstrip(' ')
+    else:
+        time_finished = time_diff / 1000
+        time_unit = 'second(s)'
+
+    return time_finished, time_unit
+
+
 def timer(target):
 
     def wrapper(*args, **kwargs):
         start = time.time()
         target(*args, **kwargs)
         end = time.time()
-        time_diff = end - start
-        print('[light_pink1]Ran for {:.2f}'.format(time_diff))
+        time_diff, unit = convert_time_unit(end - start)
+        print(f'[light_pink1]Ran for {time_diff:.2f} {unit}')
 
     return wrapper
 
 
 if __name__ == '__main__':
-    pass
+    print(convert_time_unit(86400))

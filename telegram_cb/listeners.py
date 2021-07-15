@@ -1,12 +1,13 @@
 import asyncio
 import os
+import platform
+import subprocess
 
 from requests.exceptions import ReadTimeout
 from telethon import TelegramClient
 from telethon.events import NewMessage
 
 from .clients import Bot
-from .exceptions import NoOfferError
 from .helpers import restart_client, timer
 from .settings import BASE_DIR
 
@@ -27,13 +28,14 @@ def main(session: str, api_id: str, api_hash: str, entity: str) -> None:
         session = check_session_file(session)
         client = TelegramClient(session, api_id, api_hash)
         run_loop(client, entity)
-    except Exception as e:
-        print(e)
-    except (KeyboardInterrupt, NoOfferError) as e:
-        pass
     except ReadTimeout as rt:
         print(f'{rt}\nRestarting client. Hit Ctrl+C to stop.')
         restart_client()
+    except KeyboardInterrupt:
+        if platform.system() == 'Windows':
+            subprocess.run('cls')
+        else:
+            subprocess.run('clear')
 
     # TODO: show earning summary
 
