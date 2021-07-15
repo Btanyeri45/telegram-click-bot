@@ -3,7 +3,7 @@ import os
 import sys
 import time
 from datetime import date
-from typing import Any
+from typing import Any, Union
 from urllib.parse import urljoin
 
 from rich import print
@@ -118,7 +118,7 @@ def restart_client():
         sys.exit(e)
 
 
-def convert_time_unit(time_diff: float) -> tuple[str, str]:
+def convert_time_unit(time_diff: float) -> tuple[Union[str, float], str]:
     minute = 60000.0
     hour = 3600000.0
     day = 86400000.0
@@ -148,8 +148,11 @@ def timer(target):
         start = time.time()
         target(*args, **kwargs)
         end = time.time()
-        time_diff, unit = convert_time_unit(end - start)
-        print(f'[light_pink1]Ran for {time_diff:.2f} {unit}')
+        time_fin, unit = convert_time_unit(end - start)
+        if isinstance(time_fin, str):
+            print(f'[light_pink1]Ran for {time_fin} {unit}')
+        elif isinstance(time_fin, float):
+            print(f'[light_pink1]Ran for {time_fin:.2f} {unit}')
 
     return wrapper
 
