@@ -29,9 +29,17 @@ class Bot:
     @console_logger
     def visit_site(self):
         # Specify limits
+        # Number of visit attempts for site visits.
         max_attempt = 100
-        max_link_cls = 10
-        max_link_err = 10
+
+        # So far the longest required site stay is 60 seconds.
+        # An integer of 13 * 5 should be enough to accomodate that
+        # requirement.
+        max_link_err = 13
+
+        # The number of times the client will attempt to visit a link.
+        # An int of 15 sounds reasonable.
+        max_link_cls = 15
 
         # Counters
         cls_att = 0
@@ -41,7 +49,7 @@ class Bot:
         while visit_att <= max_attempt:
 
             # Remove current URL when the number of allowed LinkError
-            # reaches maximum
+            # reaches maximum.
             if link_err == max_link_err:
                 link_err = 0
                 cls_att += 1
