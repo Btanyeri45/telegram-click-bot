@@ -1,7 +1,10 @@
 import os
 import sys
+import time
 from typing import Any
 from urllib.parse import urljoin
+
+from rich import print
 
 sys.stderr = open(os.devnull, 'w')
 try:
@@ -111,6 +114,18 @@ def restart_client():
         os.execv(sys.executable, ['python'] + sys.argv)
     except Exception as e:
         sys.exit(e)
+
+
+def timer(target):
+
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        target(*args, **kwargs)
+        end = time.time()
+        time_diff = end - start
+        print('[light_pink1]Ran for {:.2f}'.format(time_diff))
+
+    return wrapper
 
 
 if __name__ == '__main__':

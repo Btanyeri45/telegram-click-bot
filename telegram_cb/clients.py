@@ -5,7 +5,7 @@ from telethon import TelegramClient, sync
 
 from .exceptions import DejavuError, LinkError, NoOfferError
 from .helpers import new_url, restart_client
-from .loggers import console_logger
+from .loggers import console_logger, start_logger
 from .messages import get_message_details
 from .tasks import do_visit_site
 
@@ -17,6 +17,7 @@ class Bot:
         self.entity = entity
 
     def main_loop(self) -> None:
+        start_logger()
         self.client.start()
         self.client.send_message(self.entity, '/visit')
 
@@ -58,10 +59,8 @@ class Bot:
             except LinkError:
                 link_err += 1
                 time.sleep(5)
-            except (KeyboardInterrupt, NoOfferError):
+            except (Exception, KeyboardInterrupt, NoOfferError):
                 new_url(clear=True)
-                break
-            except Exception:
                 raise
 
             visit_att += 1

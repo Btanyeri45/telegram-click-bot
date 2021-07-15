@@ -1,11 +1,13 @@
 import asyncio
 import os
 
+from requests.exceptions import ReadTimeout
 from telethon import TelegramClient
 from telethon.events import NewMessage
 
 from .clients import Bot
-from .helpers import restart_client
+from .exceptions import NoOfferError
+from .helpers import restart_client, timer
 from .settings import BASE_DIR
 
 
@@ -19,10 +21,21 @@ def check_session_file(session_name: str) -> str:
     return session_name
 
 
+@timer
 def main(session: str, api_id: str, api_hash: str, entity: str) -> None:
-    session = check_session_file(session)
-    client = TelegramClient(session, api_id, api_hash)
-    run_loop(client, entity)
+    try:
+        session = check_session_file(session)
+        client = TelegramClient(session, api_id, api_hash)
+        run_loop(client, entity)
+    except Exception as e:
+        print(e)
+    except (KeyboardInterrupt, NoOfferError) as e:
+        pass
+    except ReadTimeout as rt:
+        print(f'{rt}\nRestarting client. Hit Ctrl+C to stop.')
+        restart_client()
+
+    # TODO: show earning summary
 
 
 def run_loop(client: TelegramClient, entity: str):
