@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Union
 
 from rich import print
 from rich.console import Console
@@ -35,6 +35,15 @@ def console_logger(target: Callable):
         print(message_dir['idle'] % ('blink bold red1', 'blink bold red1'))
 
     return log
+
+
+def console_show_stat(message: str,
+                      reuse_line: bool = False) -> Union[str, None]:
+    m = f'[rosy_brown]STAT[/rosy_brown]: [pale_green1]{message}[/pale_green1]'
+    if reuse_line:
+        print(m, end='\r')
+    else:
+        print(m)
 
 
 @console_logger

@@ -1,30 +1,24 @@
 import time
 
-from requests import ConnectionError
+from requests import ConnectionError, ReadTimeout
 from telethon import TelegramClient, sync
 
 from .exceptions import DejavuError, LinkError, NoOfferError
-from .helpers import new_url, restart_client
-from .loggers import console_logger, start_logger
+from .helpers import countdown_timer, new_url, restart_client
+from .loggers import console_logger, console_show_stat, start_logger
 from .messages import get_message_details
 from .tasks import do_visit_site
 
 
 class Bot:
 
-    def __init__(self, client: TelegramClient, entity: str) -> None:
+    def __init__(self,
+                 client: TelegramClient,
+                 entity: str,
+                 reloop: bool = False) -> None:
         self.client = client
         self.entity = entity
-
-    def main_loop(self) -> None:
-        start_logger()
-        self.client.start()
-        self.client.send_message(self.entity, '/visit')
-
-        with self.client:
-            self.visit_site()
-            # self.join_chat()
-            # self.message_bot()
+        self.reloop = reloop
 
     @console_logger
     def visit_site(self):
@@ -80,3 +74,21 @@ class Bot:
 
     def message_bot(self):
         pass
+
+    def main_loop(self) -> None:
+        start_logger()
+        self.client.start()
+        self.client.send_message(self.entity, '/visit')
+
+        with self.client:
+            self.visit_site()
+            # self.join_chat()
+            # self.message_bot()
+
+        if self.reloop:
+            # Allow click bot to refresh more offers, then run client
+            # again
+            console_show_stat('Runs are scheduled.')
+            console_show_stat('Allowing target bot to refresh more offers...')
+            countdown_timer(3600)
+            raise ReadTimeout

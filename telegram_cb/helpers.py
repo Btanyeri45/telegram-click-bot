@@ -2,7 +2,6 @@ import datetime
 import os
 import sys
 import time
-from datetime import date
 from typing import Any, Union
 from urllib.parse import urljoin
 
@@ -16,7 +15,8 @@ finally:
 
 from bs4 import BeautifulSoup
 
-from telegram_cb.settings import BASE_DIR
+from .loggers import console_show_stat
+from .settings import BASE_DIR
 
 
 def custom_headers() -> dict[str, str]:
@@ -155,6 +155,15 @@ def timer(target):
             print(f'[light_pink1]Ran for {time_fin:.2f} {unit}')
 
     return wrapper
+
+
+def countdown_timer(seconds: int):
+    while seconds:
+        mins, secs = divmod(seconds, 60)
+        timer = 'Time left: {:02d}:{:02d}'.format(mins, secs)
+        console_show_stat(timer, reuse_line=True)
+        time.sleep(1)
+        seconds -= 1
 
 
 if __name__ == '__main__':
