@@ -28,13 +28,30 @@ git clone https://github.com/huenique/telegram-click-bot.git
 
     Inside the `.env` file, set your Telegram `API_ID` and `API_HASH`. Get your own API_ID and API_HASH from [https://my.telegram.org](https://my.telegram.org)
 
-2. Install the dependencies: `pip install -r requirements.txt`
+2. Create a virtual environment:
+
+    ```
+    python3.9 -m venv my_virtualenv
+    ```
+
+3. Activate the virtual environment.
+
+    On Linux/OS X:
+    ```
+    source my_virtualenv/bin/activate
+    ```
+
+    On Windows:
+    ```
+    my_virtualenv/Scripts/activate
+    ```
+
+4. In the project root directory, run:
+    ```
+    pip install -r requirements.txt
+    ```
 
 # Usage
-From the package root, run:
-```
-python cli.py -h
-```
 
 Example:
 
@@ -43,12 +60,19 @@ python cli.py "@Litecoin_click_bot"
 ```
 
 You will be asked for your phone number on first run. This is what it will look like:
+
 ```
 Please enter your phone (or bot token): +639123456789
 Please enter the code you received: 12345
 ```
 
 Once you get it running, go to your Telegram app!
+
+To list the available arguments, run:
+
+```
+python cli.py -h
+```
 
 # Update
 
@@ -59,6 +83,7 @@ To update the package and to get the new features and improvements, run:
 ```
 git reset --hard
 git pull
+pip install -r requirements.txt
 ```
 
 # Tips

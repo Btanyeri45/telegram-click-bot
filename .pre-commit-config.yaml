@@ -1,0 +1,33 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: check-added-large-files
+    -   id: check-case-conflict
+    -   id: detect-private-key
+    -   id: end-of-file-fixer
+    -   id: requirements-txt-fixer
+    -   id: trailing-whitespace
+
+-   repo: local
+    hooks:
+    -   id: isort
+        name: isort-local
+        entry: isort
+        language: python
+        types: [python]
+        pass_filenames: true
+    -   id: black
+        name: black-local
+        entry: black
+        language: python
+        types: [python]
+        pass_filenames: true
+    # -   id: prospector
+    #     name: prospector-local
+    #     entry: prospector --messages-only
+    #     language: python
+    #     types: [python]
+    #     pass_filenames: true

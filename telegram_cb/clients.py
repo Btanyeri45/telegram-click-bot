@@ -1,6 +1,7 @@
 import time
 
-from requests import ConnectionError, ReadTimeout
+from requests import ConnectionError as ConErr
+from requests import ReadTimeout
 from telethon import TelegramClient, sync
 
 from .exceptions import DejavuError, LinkError, NoOfferError
@@ -11,11 +12,9 @@ from .tasks import do_visit_site
 
 
 class Bot:
-
-    def __init__(self,
-                 client: TelegramClient,
-                 entity: str,
-                 reloop: bool = False) -> None:
+    def __init__(
+        self, client: TelegramClient, entity: str, reloop: bool = False
+    ) -> None:
         self.client = client
         self.entity = entity
         self.reloop = reloop
@@ -54,18 +53,16 @@ class Bot:
 
             try:
                 do_visit_site(get_message_details(self.client, self.entity))
-            except ConnectionError:
+            except ConErr:
                 max_attempt += 1
             except (AttributeError, DejavuError):
-                self.client.send_message(self.entity, '/visit')
+                self.client.send_message(self.entity, "/visit")
             except LinkError:
                 link_err += 1
                 time.sleep(5)
             except (KeyboardInterrupt, NoOfferError):
                 new_url(clear=True)
                 break
-            except Exception:
-                raise
 
             visit_att += 1
 
@@ -78,7 +75,7 @@ class Bot:
     def main_loop(self) -> None:
         start_logger()
         self.client.start()
-        self.client.send_message(self.entity, '/visit')
+        self.client.send_message(self.entity, "/visit")
 
         with self.client:
             self.visit_site()
@@ -88,7 +85,7 @@ class Bot:
         if self.reloop:
             # Allow click bot to refresh more offers, then run client
             # again
-            console_show_stat('Runs are scheduled.')
-            console_show_stat('Allowing target bot to refresh more offers...')
+            console_show_stat("Runs are scheduled.")
+            console_show_stat("Allowing target bot to refresh more offers...")
             countdown_timer(3600)
             raise ReadTimeout

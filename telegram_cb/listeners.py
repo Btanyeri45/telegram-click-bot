@@ -13,7 +13,7 @@ from .settings import BASE_DIR
 
 
 async def site_visits(client: TelegramClient) -> None:
-    pattern = '^There.*/visit!.'
+    pattern = "^There.*/visit!."
 
     @client.on(NewMessage(pattern=pattern))
     async def new_sites_listener(event):
@@ -34,35 +34,32 @@ def run_loop(client: TelegramClient, entity: str, scheduled: bool = False):
 
 
 def check_session_file(session_name: str) -> str:
-    """Replace user input for session with already existing session file.
-    """
-    session_dir = str(BASE_DIR).strip('telegram_cb')
+    """Replace user input for session with already existing session file."""
+    session_dir = str(BASE_DIR).replace("telegram_cb", "")
     for file in os.listdir(session_dir):
-        if file.endswith('.session'):
-            return file.split('.', 1)[0]
+        if file.endswith(".session"):
+            return file.split(".", 1)[0]
     return session_name
 
 
-def main(session: str,
-         api_id: str,
-         api_hash: str,
-         entity: str,
-         scheduled: bool = False) -> None:
+def main(
+    session: str, api_id: str, api_hash: str, entity: str, scheduled: bool = False
+) -> None:
     try:
         session = check_session_file(session)
         client = TelegramClient(session, api_id, api_hash)
         run_loop(client, entity, scheduled)
     except ReadTimeout as rt:
-        print(f'{rt}\nRestarting client. Hit Ctrl+C to stop.')
+        print(f"{rt}\nRestarting client. Hit Ctrl+C to stop.")
         restart_client()
     except KeyboardInterrupt:
-        if platform.system() == 'Windows':
-            subprocess.run('cls')
+        if platform.system() == "Windows":
+            subprocess.run("cls", check=True)
         else:
-            subprocess.run('clear')
+            subprocess.run("clear", check=True)
 
     # TODO: show earning summary
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass
