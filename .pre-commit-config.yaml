@@ -25,9 +25,9 @@ repos:
         language: python
         types: [python]
         pass_filenames: true
-    # -   id: prospector
-    #     name: prospector-local
-    #     entry: prospector --messages-only
-    #     language: python
-    #     types: [python]
-    #     pass_filenames: true
+    -   id: flake8
+        name: flake8-local
+        entry: flake8
+        language: python
+        types: [python]
+        pass_filenames: true
