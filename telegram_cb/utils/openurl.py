@@ -10,7 +10,11 @@ def open_url(url: str):
         proc = subprocess.run(["start", url], capture_output=True, check=True)
         c = proc.returncode
     elif s == "linux":
-        proc = subprocess.run(["xdg-open", url], capture_output=True, check=True)
+        proc = subprocess.run(
+            ["xdg-open", url],
+            capture_output=True,
+            check=True,
+        )
         c = proc.returncode
     else:
         webbrowser.open(url, new=2, autoraise=False)

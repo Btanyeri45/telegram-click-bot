@@ -6,8 +6,15 @@ class NoOfferError(Exception):
     current entitity.
     """
 
-    def __init__(self, entitiy: str = "", message: str = "No offers {0}") -> None:
-        self.message = message.format(f":{entitiy}") if entitiy else message.format("")
+    def __init__(
+        self,
+        entitiy: str = "",
+        message: str = "No offers {0}",
+    ) -> None:
+        if entitiy:
+            self.message = message.format(f":{entitiy}")
+        else:
+            self.message = message.format("")
         self.traceback = sys.exc_info()
 
     def __str__(self):

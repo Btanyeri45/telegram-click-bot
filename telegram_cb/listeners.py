@@ -43,7 +43,11 @@ def check_session_file(session_name: str) -> str:
 
 
 def main(
-    session: str, api_id: str, api_hash: str, entity: str, scheduled: bool = False
+    session: str,
+    api_id: str,
+    api_hash: str,
+    entity: str,
+    scheduled: bool = False,
 ) -> None:
     try:
         session = check_session_file(session)

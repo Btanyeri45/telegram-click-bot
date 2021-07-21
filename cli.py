@@ -6,9 +6,17 @@ import telegram_cb as tcb
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("entity", type=str, help="example: @Dogecoin_click_bot")
     parser.add_argument(
-        "session", type=str, help="name for the session", nargs="?", default="session"
+        "entity",
+        type=str,
+        help="example: @Dogecoin_click_bot",
+    )
+    parser.add_argument(
+        "session",
+        type=str,
+        help="name for the session",
+        nargs="?",
+        default="session",
     )
     parser.add_argument(
         "schedule",

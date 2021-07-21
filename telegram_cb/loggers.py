@@ -1,5 +1,5 @@
 import time
-from typing import Callable, Union
+from typing import Callable
 
 from rich import print as rich_print
 from rich.console import Console
@@ -19,7 +19,8 @@ def cleanup_console():
 def console_logger(target: Callable):
     def log(*args, **kwargs):
         message_dir = {
-            "active": "[%s]Performing tasks[/%s] :money_with_wings::money_with_wings::money_with_wings:",
+            "active": "[%s]Performing tasks[/%s] :money_with_wings:\
+                :money_with_wings::money_with_wings:",
             "idle": "[%s]Patiently awaiting new offers[/%s] :seven_o’clock:",
         }
         spinner = "aesthetic"
@@ -30,7 +31,13 @@ def console_logger(target: Callable):
         with console.status(message, spinner=spinner, speed=speed):
             target(*args, **kwargs)
         cleanup_console()
-        rich_print(message_dir["idle"] % ("blink bold red1", "blink bold red1"))
+        rich_print(
+            message_dir["idle"]
+            % (
+                "blink bold red1",
+                "blink bold red1",
+            )
+        )
 
     return log
 

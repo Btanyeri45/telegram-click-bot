@@ -19,7 +19,12 @@ class ClinetSession:
         return resp, resp.text.lower()
 
     def post(self, url, data, headers, timeout=5) -> tuple[str, int]:
-        resp = self.session.post(url, data=data, headers=headers, timeout=timeout)
+        resp = self.session.post(
+            url,
+            data=data,
+            headers=headers,
+            timeout=timeout,
+        )
         return resp.text, resp.status_code
 
 

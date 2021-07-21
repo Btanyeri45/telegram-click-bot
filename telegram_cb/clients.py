@@ -2,7 +2,7 @@ import time
 
 from requests import ConnectionError as ConErr
 from requests import ReadTimeout
-from telethon import TelegramClient, sync
+from telethon import TelegramClient, sync  # noqa: F401
 
 from .exceptions import DejavuError, LinkError, NoOfferError
 from .helpers import countdown_timer, new_url, restart_client
