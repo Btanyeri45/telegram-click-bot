@@ -26,9 +26,9 @@ class Bot:
         max_attempt = 100
 
         # So far the longest required site stay is 60 seconds.
-        # An integer of 13 * 5 should be enough to accomodate that
+        # An integer of 15 * 5 should be enough to accomodate that
         # requirement.
-        max_link_err = 13
+        max_link_err = 15
 
         # The number of times the client will attempt to visit a link.
         # An int of 15 sounds reasonable.
