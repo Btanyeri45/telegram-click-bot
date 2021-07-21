@@ -37,6 +37,7 @@ def do_visit_site(chat_summary: dict) -> None:
     cf = "challenge-form"
     tl = "timeleft"
     clientuser_msg = "/visit"
+    page_indicator = "action="
 
     url = check_buttonurl(chat_summary)["url"]
     if not new_url(url=url):
@@ -45,7 +46,7 @@ def do_visit_site(chat_summary: dict) -> None:
     session: ClinetSession = ClinetSession()
     get_res, resp_text = session.get(url)
 
-    if clientuser_msg in resp_text:
+    if clientuser_msg in resp_text and page_indicator not in resp_text:
         raise DejavuError
     if tl in resp_text:
         opt = post_options(get_res.text, url)
